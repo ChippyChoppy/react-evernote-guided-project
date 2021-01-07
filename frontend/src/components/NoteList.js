@@ -2,10 +2,15 @@ import React from 'react';
 import NoteItem from './NoteItem';
 
 const NoteList = (props) => {
-  return (
+
+  const renderNotes = () => {
+    return props.notesArray.map(note => {return <NoteItem key={note.id} note={note} clickHandler={props.clickHandler} />})
+  }
+
+  return (    
     <ul>
-      {/* Render list of notes here... */}
-      <NoteItem />
+    {/* {console.log(props.notesArray)} */}
+    {renderNotes()}
     </ul>
   );
 }
