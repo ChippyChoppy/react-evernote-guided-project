@@ -17,7 +17,7 @@ class NoteContainer extends Component {
     fetch('http://localhost:3000/api/v1/notes')
       .then(r => r.json())
       .then(allNotes => {
-        this.setState({arrayONotes: allNotes})
+        this.setState({ arrayONotes: allNotes })
       })
   }
   // Sidebar clickHandler to setState to show selected note in Content
@@ -33,8 +33,20 @@ class NoteContainer extends Component {
     this.setState({ editBeenClicked: false })
   }
 
-  searchChangeHandler = (e) => {
-    this.setState({searchValue: e.target.value})
+  newNoteHandler = (noteObject) => {
+    console.log("in create", noteObject)
+    fetch('http://localhost:3000/api/v1/notes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accepts': 'application/json'
+      },
+      body: JSON.stringify(noteObject)
+    })
+      .then(response => response.json())
+      .then(newNoteObject => {
+        this.setState({ arrayONotes: [...this.state.arrayONotes, newNoteObject] })
+      })
   }
 
   editNoteSubmitHandler = (noteId, noteObject) => {
@@ -57,22 +69,26 @@ class NoteContainer extends Component {
       })
   }
 
-  searchNotes =() => {
+  searchChangeHandler = (e) => {
+    this.setState({ searchValue: e.target.value })
+  }
+
+  searchNotes = () => {
     let filteredNotesArray = [...this.state.arrayONotes]
     if (this.state.searchValue !== "") {
-      filteredNotesArray = filteredNotesArray.filter(note => note.title.toLowerCase().includes(this.state.searchValue.toLowerCase()))
+      filteredNotesArray = filteredNotesArray.filter(note => note.title.toLowerCase().includes(this.state.searchValue.toLowerCase()) || note.body.toLowerCase().includes(this.state.searchValue.toLowerCase()))
       return filteredNotesArray
     } else {
       return filteredNotesArray
     }
   }
-  
+
   render() {
     return (
       <Fragment>
         <Search searchValue={this.state.searchValue} searchChangeHandler={this.searchChangeHandler} />
         <div className='container'>
-          <Sidebar notesArray={this.searchNotes()} clickHandler={this.clickHandler} />
+          <Sidebar newNoteHandler={this.newNoteHandler} notesArray={this.searchNotes()} clickHandler={this.clickHandler} />
           <Content editBeenClicked={this.state.editBeenClicked} editClickHandler={this.editClickHandler} cancelClicked={this.cancelClickHandler} beenClicked={this.state.beenClicked} selectedNote={this.state.selectedNote} editSubmitHandler={this.editNoteSubmitHandler} />
         </div>
       </Fragment>
