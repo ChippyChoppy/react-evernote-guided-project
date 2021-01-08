@@ -13,36 +13,34 @@ import Instructions from '../components/Instructions';
 class Content extends Component {
 
   state = {
-    editBeenClicked: false,
-    saveBeenClicked: false
+    saveBeenClicked: false,
   }
 
-  editClickHandler = () => {
-    this.setState({ editBeenClicked: !this.state.editBeenClicked })
-  }
+  
+  // editClickHandler = () => {
+  //   this.setState({ editBeenClicked: !this.state.editBeenClicked })
+  // }
 
-  cancelClickHandler = () => {
-    this.setState({ editBeenClicked: false })
-  }
+  // cancelClickHandler = () => {
+  //   this.setState({ editBeenClicked: false })
+  // }
 
   renderContent = () => {
     const noteObject = this.props.selectedNote
 
-    if (this.state.editBeenClicked === true) {
-      return <NoteEditor selectedNote={noteObject} defaultTitleValue={noteObject.title} defaultBodyValue={noteObject.body} noteId={noteObject.id} submitHandler={this.props.editSubmitHandler} cancelClicked={this.cancelClickHandler} />;
-    }
-
-    else if (this.props.beenClicked) {
-      return <NoteViewer editClickHandler={this.editClickHandler} selectedNote={noteObject} />;
-    }
-
-    else {
+    if (this.props.editBeenClicked) {
+      return <NoteEditor selectedNote={noteObject} defaultTitleValue={noteObject.title} defaultBodyValue={noteObject.body} noteId={noteObject.id} submitHandler={this.props.editSubmitHandler} cancelClicked={this.props.cancelClicked} />;
+    } 
+    if (this.props.beenClicked === true ) {
+      return <NoteViewer editClickHandler={this.props.editClickHandler} selectedNote={noteObject} />;
+    } else {
       return <Instructions />;
     }
   }
 
   render() {
     console.log(this.props)
+    console.log(this.state)
     return (
       <div className='master-detail-element detail'>
         {this.renderContent()}

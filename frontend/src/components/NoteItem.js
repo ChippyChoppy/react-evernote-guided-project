@@ -21,6 +21,7 @@ class NoteItem extends React.Component {
   }
 
   render() {
+    console.log(this.props)
     return (
       <li onClick={this.localClickHandler} >
         <h2>{this.props.note.title}</h2>

@@ -8,10 +8,10 @@ class Sidebar extends Component {
   }
 
   render() {
-    // console.log(this.props)
+    console.log(this.props)
     return (
       <div className='master-detail-element sidebar'>
-        <NoteList clickHandler= {this.props.clickHandler} notesArray={this.props.notesArray}/>
+        <NoteList clickHandler={this.props.clickHandler} notesArray={this.props.notesArray}/>
         <button>New</button>
       </div>
     );

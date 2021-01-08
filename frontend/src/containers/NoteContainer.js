@@ -9,6 +9,7 @@ class NoteContainer extends Component {
     arrayONotes: [],
     selectedNote: {},
     beenClicked: false,
+    editBeenClicked: false,
     searchValue: ""
   }
 
@@ -21,7 +22,19 @@ class NoteContainer extends Component {
   }
   // Sidebar clickHandler to setState to show selected note in Content
   clickHandler = (noteObject) => {
-    this.setState({ selectedNote: noteObject, beenClicked: true })
+    this.setState({ selectedNote: noteObject, beenClicked: true, editBeenClicked: false })
+  }
+  // allows sidebar click to change state of editbeenclicked and pass into content so conditional render works correctly
+  editClickHandler = () => {
+    this.setState({ editBeenClicked: !this.state.editBeenClicked })
+  }
+  // moved into container because editBeenClicked had to be moved up
+  cancelClickHandler = () => {
+    this.setState({ editBeenClicked: false })
+  }
+
+  searchChangeHandler = (e) => {
+    this.setState({searchValue: e.target.value})
   }
 
   editNoteSubmitHandler = (noteId, noteObject) => {
@@ -57,10 +70,10 @@ class NoteContainer extends Component {
   render() {
     return (
       <Fragment>
-        <Search />
+        <Search searchValue={this.state.searchValue} searchChangeHandler={this.searchChangeHandler} />
         <div className='container'>
           <Sidebar notesArray={this.searchNotes()} clickHandler={this.clickHandler} />
-          <Content beenClicked={this.state.beenClicked} selectedNote={this.state.selectedNote} editSubmitHandler={this.editNoteSubmitHandler} />
+          <Content editBeenClicked={this.state.editBeenClicked} editClickHandler={this.editClickHandler} cancelClicked={this.cancelClickHandler} beenClicked={this.state.beenClicked} selectedNote={this.state.selectedNote} editSubmitHandler={this.editNoteSubmitHandler} />
         </div>
       </Fragment>
     );
